@@ -1,0 +1,1 @@
+<?php // All you know is not right

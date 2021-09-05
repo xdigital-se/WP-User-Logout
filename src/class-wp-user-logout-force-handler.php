@@ -21,26 +21,35 @@ class WP_User_Logout_Force_Handler {
 
         /** @filter load on user table row wanted */
         add_filter( 'manage_users_custom_column', array($this, 'modify_ulf_status_row'), 10, 3 );
+
+        add_filter( 'manage_users_sortable_columns', array( $this, 'make_ulf_field_sortable' ) );
+
     }
 
     public function include_ulf_method( $contact_methods ) {
-        $contact_methods['ufl_status'] = 'ulf_status';
+        $contact_methods['ulf_status'] = 'ulf_status';
         return $contact_methods;
     }
 
     public function modify_users_table( $column ) {
-        $column['ufl_status'] = __( 'ULF Status', ULF_TEXT_DOMAIN);
+        $column['ulf_status'] = __( 'ULF Status', ULF_TEXT_DOMAIN);
         return $column;
     }
 
-    public function modify_ulf_status_row( $val, $column_name, $user_id ) {
+    public function modify_ulf_status_row( $value, $column_name, $user_id ) {
         switch ($column_name) {
             case 'ulf_status' :
                 return '—';
             default:
                 return '—';
         }
-        return $val;
+        return $value;
+    }
+
+    public function make_ulf_field_sortable( $olumns ) {
+        $columns['ulf_status'] = 'ulf_status';
+
+		return $columns;
     }
 
     /**

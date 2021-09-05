@@ -1,0 +1,21 @@
+.online-circle {
+	color: green
+}
+
+.online-circle:before {
+	content: ' \25CF';
+	font-size: 20px
+}
+
+.offline-circle {
+	color: #555
+}
+
+.offline-circle:before {
+	content: ' \25CF';
+	font-size: 20px
+}
+
+th#ulf_status {
+	width: 16%
+}

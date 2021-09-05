@@ -9,6 +9,9 @@ class WP_User_Logout_Force_Handler {
         /** @var string current page */
         global $pagenow;
 
+        add_action( 'init', array( $this, 'update_online_users_status' ) );
+        add_action( 'init', array( $this, 'update_last_login' ) );
+
         // Returning if user don't have caps or page is not users page
         if ( 'users.php' !== $pagenow || ! $this->user_has_cap() )
 			return;
@@ -24,6 +27,8 @@ class WP_User_Logout_Force_Handler {
 
         add_filter( 'manage_users_sortable_columns', array( $this, 'make_ulf_field_sortable' ) );
 
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
     }
 
     public function include_ulf_method( $contact_methods ) {
@@ -32,17 +37,37 @@ class WP_User_Logout_Force_Handler {
     }
 
     public function modify_users_table( $column ) {
-        $column['ulf_status'] = __( 'ULF Status', ULF_TEXT_DOMAIN);
+        $column['ulf_status'] = __( 'Login Activity', ULF_TEXT_DOMAIN);
         return $column;
     }
 
     public function modify_ulf_status_row( $value, $column_name, $user_id ) {
-        switch ($column_name) {
-            case 'ulf_status' :
-                return '—';
-            default:
-                return '—';
+        
+        if ( 'ulf_status' === $column_name ) {
+
+            $is_user_online = $this->is_user_online( $user_id );
+
+            if ( $is_user_online ) {
+                $logout_link = add_query_arg(
+					array(
+						'action' => 'ulf-logout-single',
+						'user'   => $user_id,
+					)
+				);
+				$logout_link = remove_query_arg( array( 'new_role' ), $logout_link );
+				$logout_link = wp_nonce_url( $logout_link, 'ulf-logout-single' );
+
+				$value  = '<span class="online-circle">' . esc_html__( 'Online', ULF_TEXT_DOMAIN ) . '</span>';
+				$value .= ' </br>';
+				$value .= '<a style="color:red" href="' . esc_url( $logout_link ) . '">' . _x( 'Logout', 'The action on users list page', ULF_TEXT_DOMAIN ) . '</a>';
+            } else {
+				$last_login = $this->get_last_login( $user_id );
+				$value      = '<span class="offline-circle">' . esc_html__( 'Offline ', ULF_TEXT_DOMAIN );
+				$value     .= '</br>' . esc_html__( 'Last Login: ', ULF_TEXT_DOMAIN );
+				$value     .= ! empty( $last_login ) ? $last_login . ' ago' : esc_html__( 'Never', ULF_TEXT_DOMAIN ) . '</span>';
+			}
         }
+
         return $value;
     }
 
@@ -50,6 +75,82 @@ class WP_User_Logout_Force_Handler {
         $columns['ulf_status'] = 'ulf_status';
 
 		return $columns;
+    }
+
+    public function is_user_online( $user_id ) {
+
+        $logged_in_users = get_transient( 'online_status' );
+        
+        // Online, if (s)he is in the list and last activity was less than 60 seconds ago
+		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( 15 * 60 ) ) );
+    }
+
+    public function enqueue_scripts() {
+        wp_enqueue_style( 'user-logout-force', plugins_url( 'dist/css/user-logout-force.css', WP_USER_LOGOUT_FORCE_PLUGIN_FILE ), array(), ULF_ABSPATH, $media = 'all' );
+		wp_enqueue_script( 'user-logout-force-js', plugins_url( 'dist/js/script.js', WP_USER_LOGOUT_FORCE_PLUGIN_FILE ), array(), ULF_ABSPATH, false );
+		wp_localize_script(
+			'user-logout-force-js',
+			'ulf_plugins_params',
+			array(
+				'ajax_url'     => admin_url( 'admin-ajax.php' ),
+				'review_nonce' => wp_create_nonce( 'review-notice' ),
+			)
+		);
+    }
+
+    /**
+	 * Update online users status. Store in transient.
+	 *
+	 * @link  https://wordpress.stackexchange.com/a/34434/126847
+	 * @return void.
+	 */
+	public function update_online_users_status() {
+
+		// Get the user online status list.
+		$logged_in_users = get_transient( 'online_status' );
+
+		// Get current user ID
+		$user = wp_get_current_user();
+        
+		// Check if the current user needs to update his online status;
+		// Needs if user is not in the list.
+		$no_need_to_update = isset( $logged_in_users[ $user->ID ] )
+
+			// And if his "last activity" was less than let's say ...6 seconds ago
+			&& $logged_in_users[ $user->ID ] > ( time() - ( 1 * 60 ) );
+
+		// Update the list if needed
+        
+		if ( ! $no_need_to_update ) {
+			$logged_in_users[ $user->ID ] = time();
+			set_transient( 'online_status', $logged_in_users, $expire_in = ( 60 * 60 ) );
+			// 60 mins
+		}
+	}
+
+    /**
+	 * Store last login info in usermeta table.
+	 *
+	 * @since  1.1.0
+	 *
+	 * @return void.
+	 */
+	public function update_last_login() {
+
+		$user_id = get_current_user_id();
+		update_user_meta( $user_id, 'last_login', time() );
+	}
+
+    public function get_last_login( $user_id ) {
+        $last_login     = get_user_meta( $user_id, 'last_login', true );
+		$the_login_date = '';
+
+		if ( ! empty( $last_login ) && 0.00058373 != $last_login ) {
+			
+			$the_login_date = human_time_diff( $last_login );
+		}
+
+		return $the_login_date;
     }
 
     /**

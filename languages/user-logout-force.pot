@@ -14,5 +14,5 @@ msgstr ""
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #: src/class-wp-user-logout-force-handler.php:25
-msgid "ULF Status"
+msgid "Login Activity"
 msgstr ""

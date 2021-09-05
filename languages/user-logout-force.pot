@@ -1,0 +1,18 @@
+# Copyright (C) 2021 Sanjeev Aryal
+# This file is distributed under the same license as the ULF package.
+msgid ""
+msgstr ""
+"Project-Id-Version: User Logout Force 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/xdigital-se/UserLogoutForce\n"
+"POT-Creation-Date: 2021-04-08 03:52:34+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Amirhossein Meydani <amirhwsin@outlook.com>\n"
+"Language-Team: xdigital <developers@xdigital.se>\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
+
+#: src/class-wp-user-logout-force-handler.php:25
+msgid "ULF Status"
+msgstr ""

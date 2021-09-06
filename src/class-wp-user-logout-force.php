@@ -132,5 +132,6 @@ final class WP_User_Logout_Force {
      */
     private function includes() {
 		include_once dirname( __FILE__ ) . '/class-wp-user-logout-force-handler.php';
+        include_once  dirname( __FILE__ ). '/class-wp-user-logout-force-options.php';
 	}
 }

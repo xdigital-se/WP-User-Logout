@@ -122,6 +122,8 @@ class WP_User_Logout_Force_Options {
                     update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
                 }
             }
+
+            $_GET['settings-updated'] = true;
         }
         
         $this->options = get_option( 'ulf_options' );

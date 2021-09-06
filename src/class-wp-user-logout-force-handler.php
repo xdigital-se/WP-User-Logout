@@ -4,6 +4,10 @@ defined( 'ABSPATH' ) or die(); // Exit if called directly
 
 class WP_User_Logout_Force_Handler {
     
+	private $make_offline_rate = 1;
+
+	private $destroy_others_on_login = false;
+
     public function __construct() {
 
         /** @var string current page */
@@ -35,6 +39,9 @@ class WP_User_Logout_Force_Handler {
 
 		add_filter( 'bulk_actions-users', array( $this, 'add_bulk_action' ) );
 
+		// Setting user options
+		$this->make_offline_rate 		= get_option( 'ulf_make_offline', 1 );
+		$this->destroy_others_on_login 	= get_option( 'ulf_destroy_others', false );
     }
 
     public function include_ulf_method( $contact_methods ) {
@@ -88,7 +95,7 @@ class WP_User_Logout_Force_Handler {
         $logged_in_users = get_transient( 'online_status' );
         
         // Online, if (s)he is in the list and last activity was less than 60 seconds ago
-		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( 1 * 60 ) ) );
+		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( $this->get_make_offline_time * 60 ) ) );
     }
 
     public function enqueue_scripts() {
@@ -251,6 +258,14 @@ class WP_User_Logout_Force_Handler {
 
 		return $the_login_date;
     }
+
+	private function get_make_offline_time() {
+		return $this->make_offline_rate;
+	}
+
+	private function destroy_others_on_login() {
+		return $this->destroy_others_on_login;
+	}
 
     /**
      * Checking to see user has cap to do this or not

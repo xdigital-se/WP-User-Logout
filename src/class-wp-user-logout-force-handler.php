@@ -29,6 +29,8 @@ class WP_User_Logout_Force_Handler {
 
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		add_action( 'load-users.php', array( $this, 'handle_requests' ) );
+
     }
 
     public function include_ulf_method( $contact_methods ) {
@@ -50,7 +52,7 @@ class WP_User_Logout_Force_Handler {
             if ( $is_user_online ) {
                 $logout_link = add_query_arg(
 					array(
-						'action' => 'ulf-logout-single',
+						'action' => 'logout',
 						'user'   => $user_id,
 					)
 				);
@@ -82,7 +84,7 @@ class WP_User_Logout_Force_Handler {
         $logged_in_users = get_transient( 'online_status' );
         
         // Online, if (s)he is in the list and last activity was less than 60 seconds ago
-		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( 15 * 60 ) ) );
+		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( 1 * 60 ) ) );
     }
 
     public function enqueue_scripts() {
@@ -125,6 +127,56 @@ class WP_User_Logout_Force_Handler {
 			$logged_in_users[ $user->ID ] = time();
 			set_transient( 'online_status', $logged_in_users, $expire_in = ( 60 * 60 ) );
 			// 60 mins
+		}
+	}
+
+	public function handle_requests() {
+
+		if ( isset( $_REQUEST['action'] ) && 'logout_all' === $_REQUEST['action']) {
+			check_admin_referer( 'user-logout-force-nonce' );
+
+			// Logout all users
+			$this->logout_all_users();
+
+			wp_safe_redirect( admin_url( 'users.php' ) );
+			exit();
+		}
+
+		$action	= isset( $_REQUEST['action'] ) ? sanitize_key( $_REQUEST['action'] ) : false;
+		$mode	= isset( $_POST['mode'] ) ? $_POST['mode'] : false;
+
+		if ( 'list' === $mode)
+			return; // Bulk requests not allowed in multisite
+
+		if ( !empty( $action ) && 'logout' === $action ) {
+
+			check_admin_referer( 'ulf-logout-single' );
+
+			$this->logout_user( (isset( $_GET['user'] ) ? absint( $_GET['user'] ) : 0) );
+
+			wp_redirect( 'users.php' );
+			exit();
+		}
+	}
+
+	private function logout_user( $user_id ) {
+
+		$sessions = WP_Session_Tokens::get_instance( $user_id );
+
+		$sessions->destroy_all();
+
+	}
+
+	private function logout_all_users() {
+		$users = get_users();
+
+		foreach ( $users as $user ) {
+
+			// Get all sessions for user with ID $user_id
+			$sessions = WP_Session_Tokens::get_instance( $user->ID );
+
+			// We have got the sessions, destroy them all!
+			$sessions->destroy_all();
 		}
 	}
 

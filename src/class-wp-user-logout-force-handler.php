@@ -26,6 +26,7 @@ class WP_User_Logout_Force_Handler {
         add_filter( 'manage_users_custom_column', array($this, 'modify_ulf_status_row'), 10, 3 );
 
         add_filter( 'manage_users_sortable_columns', array( $this, 'make_ulf_field_sortable' ) );
+		add_filter( 'users_list_table_query_args', array( $this, 'sort_by_login_activity' ) );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -205,6 +206,25 @@ class WP_User_Logout_Force_Handler {
 		$actions['ulf-bulk-action'] = esc_html__( 'Logout', ULF_TEXT_DOMAIN );
 		
 		return $actions;
+	}
+
+	public function sort_by_login_activity( $args ) {
+		
+		if ( isset( $args['orderby'] ) && 'ulf_status' == $args['orderby'] ) {
+
+			$order = isset( $args['order'] ) && $args['order'] === 'asc' ? 'desc' : 'asc';
+
+			$args = array_merge(
+				$args,
+				array(
+					'meta_key' => 'last_login',
+					'orderby'  => 'meta_value',
+					'order'    => $order,
+				)
+			);
+		}
+
+		return $args;
 	}
 
     /**

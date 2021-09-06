@@ -70,7 +70,7 @@ class WP_User_Logout_Force_Options {
         if ( 'on' === $option)
             $checked = 'checked';
         ?>
-            <input type="hidden" name="destroy_others" value="<?php echo ( $checked === '' ) ? 'on' : 'no'; ?>">
+            
             <input type="checkbox" name="destroy_others" default="no" <?php echo $checked; ?>>
             <p>If user logged in with new device or browser remove other sessions and keep only active session.</p>
         <?php
@@ -115,12 +115,16 @@ class WP_User_Logout_Force_Options {
                 }
             }
             if ( isset( $_POST['destroy_others']) ) {
-                $option = get_option( 'ulf_destroy_others', false);
-                if ( false === $option ) {
-                    add_option( 'ulf_destroy_others', $_POST['destroy_others'] );
-                }else {
-                    update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
-                }
+                add_ulf_destroy:
+                    $option = get_option( 'ulf_destroy_others', false);
+                    if ( false === $option ) {
+                        add_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                    }else {
+                        update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                    }
+            }else {
+                $_POST['destroy_others'] = 'no';
+                goto add_ulf_destroy;
             }
 
             $_GET['settings-updated'] = true;

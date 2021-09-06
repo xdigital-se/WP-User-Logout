@@ -30,6 +30,9 @@ class WP_User_Logout_Force_Handler {
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		add_action( 'load-users.php', array( $this, 'handle_requests' ) );
+		add_action( 'load-users.php', array( $this, 'handle_bulk_actions' ) );
+
+		add_filter( 'bulk_actions-users', array( $this, 'add_bulk_action' ) );
 
     }
 
@@ -178,6 +181,30 @@ class WP_User_Logout_Force_Handler {
 			// We have got the sessions, destroy them all!
 			$sessions->destroy_all();
 		}
+	}
+
+	public function handle_bulk_actions() {
+		
+		if ( empty( $_REQUEST['users'] ) || empty( $_REQUEST['action']) )
+			return;
+			
+		if ( 'ulf-bulk-action' !== $_REQUEST['action'] )
+			return;
+		
+		$users = array_map( 'absint', (array) $_REQUEST['users'] );
+		
+		foreach ($users as $user) {
+			
+			$this->logout_user( $user );
+		}
+
+		return admin_url( 'users.php' );
+	}
+
+	public function add_bulk_action( $actions ) {
+		$actions['ulf-bulk-action'] = esc_html__( 'Logout', ULF_TEXT_DOMAIN );
+		
+		return $actions;
 	}
 
     /**

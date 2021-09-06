@@ -95,7 +95,7 @@ class WP_User_Logout_Force_Handler {
         $logged_in_users = get_transient( 'online_status' );
         
         // Online, if (s)he is in the list and last activity was less than 60 seconds ago
-		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( $this->get_make_offline_time * 60 ) ) );
+		return isset( $logged_in_users[ $user_id ] ) && ( $logged_in_users[ $user_id ] > ( time() - ( $this->get_make_offline_time() * 60 ) ) );
     }
 
     public function enqueue_scripts() {

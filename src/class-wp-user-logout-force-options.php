@@ -58,14 +58,20 @@ class WP_User_Logout_Force_Options {
 
     public function ulf_options_fields_offline() {
         ?>
-            <input type="number" name="make_offline" default="1" placeholder="1" value="<?php echo esc_attr( get_option('make_offline') ); ?>">
+            <input type="number" name="make_offline" default="1" placeholder="1" value="<?php echo esc_attr( get_option('ulf_make_offline', 1) ); ?>">
             <p>Make user offline in how much time of inactivity?</p>
         <?php
     }
 
     public function ulf_options_fields_destroy_other_sessions() {
+        $option = get_option('ulf_destroy_others');
+        
+        $checked = '';
+        if ( 'on' === $option)
+            $checked = 'checked';
         ?>
-            <input type="checkbox" name="destroy_others" value="<?php echo esc_attr( get_option('destroy_others') ); ?>">
+            <input type="hidden" name="destroy_others" value="<?php echo ( $checked === '' ) ? 'on' : 'no'; ?>">
+            <input type="checkbox" name="destroy_others" default="no" <?php echo $checked; ?>>
             <p>If user logged in with new device or browser remove other sessions and keep only active session.</p>
         <?php
     }
@@ -80,7 +86,6 @@ class WP_User_Logout_Force_Options {
      * @return   array    $new_input    The sanitized input.
      */
     public function sanitize( $input ) {
-        print_r($input);
         $new_input = array();
         if( isset( $input['make_offline'] ) )
             $new_input['make_offline'] = absint( $input['make_offline'] );
@@ -96,6 +101,29 @@ class WP_User_Logout_Force_Options {
         if ( ! current_user_can( 'edit_users' ) )
             return;
      
+        if ( !empty($_POST) ) {
+
+            // Security check
+            if ( ! check_admin_referer('ulf-options') )
+                return;
+            
+            if ( isset( $_POST['make_offline'] ) ) {
+                if ( false === get_option( 'ulf_make_offline', false) ) {
+                    add_option( 'ulf_make_offline', $_POST['make_offline'] );
+                }else {
+                    update_option( 'ulf_make_offline', $_POST['make_offline'] );
+                }
+            }
+            if ( isset( $_POST['destroy_others']) ) {
+                $option = get_option( 'ulf_destroy_others', false);
+                if ( false === $option ) {
+                    add_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                }else {
+                    update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                }
+            }
+        }
+        
         $this->options = get_option( 'ulf_options' );
 
         if ( isset( $_GET['settings-updated'] ) ) {
@@ -107,8 +135,7 @@ class WP_User_Logout_Force_Options {
         settings_errors( 'ulf_messages' );
         ?>
             <div class="wrap">
-                <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-                <form action="options.php" method="post">
+                <form action="users.php?page=ulf-options" method="post">
                     <?php
                     // output security fields
                     settings_fields( 'ulf' );
@@ -125,4 +152,5 @@ class WP_User_Logout_Force_Options {
     }
 }
 
-new WP_User_Logout_Force_Options();
+if ( is_admin() )
+    new WP_User_Logout_Force_Options();

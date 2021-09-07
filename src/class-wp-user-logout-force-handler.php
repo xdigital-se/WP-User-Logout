@@ -1,5 +1,15 @@
 <?php
+/**
+ * ULF Handler class
+ * 
+ * @since   1.0
+ * @package ulf
+ * @author  Amirhosse Meydani
+ * @license MIT
+ */
+
 defined('ABSPATH') or die(); // Exit if called directly
+
 class WP_User_Logout_Force_Handler
 {
 

@@ -16,6 +16,8 @@ class WP_User_Logout_Force_Handler {
         add_action( 'init', array( $this, 'update_online_users_status' ) );
         add_action( 'init', array( $this, 'update_last_login' ) );
 
+		add_action( 'wp_login', array( $this, 'handle_new_login' ), 10, 2 );
+
         // Returning if user don't have caps or page is not users page
         if ( 'users.php' !== $pagenow || ! $this->user_has_cap() )
 			return;
@@ -258,6 +260,17 @@ class WP_User_Logout_Force_Handler {
 
 		return $the_login_date;
     }
+
+	public function handle_new_login( $user, $user_id ) {
+		
+		if ( $this->destroy_others_on_login() ) {
+			$sessions 	= WP_Session_Tokens::get_instance( $user_id );
+			$token		= wp_get_session_token();
+	
+			$sessions->destroy_others( $token );
+		}
+
+	}
 
 	private function get_make_offline_time() {
 		return $this->make_offline_rate;

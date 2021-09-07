@@ -56,6 +56,14 @@ class WP_User_Logout_Force_Options {
         'ulf',
         'ulf_options_section',
     );
+
+    add_settings_field(
+        'ulf_options_fields_login_whitelist',
+        __( 'Login white list', ULF_TEXT_DOMAIN ),
+        array( $this, 'ulf_options_fields_login_whitelist_cb' ),
+        'ulf',
+        'ulf_options_section',
+    );
     }
 
     public function ulf_options_section_callback() {
@@ -97,6 +105,16 @@ class WP_User_Logout_Force_Options {
         <?php
     }
 
+    public function ulf_options_fields_login_whitelist_cb() {
+        $selected = get_option( 'ulf_login_while_list','' );
+
+        ?>
+            <select name="login_whitelist">
+                <?php wp_dropdown_roles($selected); ?>
+            </select>
+        <?php
+    }
+
     /**
      * A santization function that will take the incoming input, and make
      * sure that it's secure before saving it to the database.
@@ -135,6 +153,7 @@ class WP_User_Logout_Force_Options {
                     update_option( 'ulf_make_offline', $_POST['make_offline'] );
                 }
             }
+
             if ( isset( $_POST['destroy_others']) ) {
                 add_ulf_destroy:
                     $option = get_option( 'ulf_destroy_others', false);
@@ -147,6 +166,7 @@ class WP_User_Logout_Force_Options {
                 $_POST['destroy_others'] = 'no';
                 goto add_ulf_destroy;
             }
+
             if ( isset( $_POST['ulf_lock_login']) ) {
                 add_ulf_lock_login:
                     $option = get_option( 'ulf_lock_login', false);
@@ -160,6 +180,14 @@ class WP_User_Logout_Force_Options {
                 goto add_ulf_lock_login;
             }
 
+            if ( isset( $_POST['login_whitelist'] ) ) {
+                if ( false === get_option( 'ulf_login_while_list', false) ) {
+                    add_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
+                }else {
+                    update_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
+                }
+            }
+            
             $_GET['settings-updated'] = true;
         }
         

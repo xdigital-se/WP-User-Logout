@@ -20,8 +20,6 @@ class WP_User_Logout_Force_Handler {
 
 		add_action( 'wp_authenticate_user', array( $this, 'login_lockdown' ), 100, 1);
 
-		add_filter('login_redirect', array( $this, 'login_redirect_filter_handler' ), 10, 3);
-
         // Returning if user don't have caps or page is not users page
         if ( 'users.php' !== $pagenow || ! $this->user_has_cap() )
 			return;
@@ -277,6 +275,10 @@ class WP_User_Logout_Force_Handler {
 	}
 
 	public function login_lockdown( $user ) {
+
+		if ( ! $this->is_login_lockdown_active() )
+			return $user;
+
 		if ( is_wp_error( $user ) ) {
 			return $user;
 		}
@@ -289,6 +291,10 @@ class WP_User_Logout_Force_Handler {
 		}
 	
 		return $user;
+	}
+
+	private function is_login_lockdown_active() {
+		return (get_option( 'ulf_lock_login', 'no' ) === 'on') ? true : false;
 	}
 
 	private function lockdown_whitelist_check( $user_id ) {

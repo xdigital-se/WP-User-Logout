@@ -125,6 +125,12 @@ final class WP_User_Logout_Force {
         load_plugin_textdomain( 'user-logout-force', false, plugin_basename( dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) ) . '/languages' );
     }
 
+    /**
+     * Destroy all sessions for all users ( Admin login require after this action)
+     * 
+     * @since   1.0
+     * @return  void
+     */
     public static function destroy_all_sessions() {
         WP_Session_Tokens::destroy_all_for_all_users();
     }
@@ -136,6 +142,6 @@ final class WP_User_Logout_Force {
      */
     private function includes() {
         include_once dirname( __FILE__ ) . '/class-wp-user-logout-force-handler.php';
-        include_once  dirname( __FILE__ ). '/class-wp-user-logout-force-options.php';
+        include_once dirname( __FILE__ ). '/class-wp-user-logout-force-options.php';
     }
 }

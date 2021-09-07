@@ -13,19 +13,25 @@ class WP_User_Logout_Force_Handler
         /** @var string current page */
         global $pagenow;
 
+        /** @action triggers on wordpress initilization to update online users status */
         add_action('init', array(
             $this,
             'update_online_users_status'
         ));
+
+        /** @action triggers on wordpress initilization to update online users last_login */
         add_action('init', array(
             $this,
             'update_last_login'
         ));
 
+        /** @action triggers on user login priority 99 params 2 */
         add_action('wp_login', array(
             $this,
             'handle_new_login'
         ) , 99, 2);
+
+        /** @action triggers on user authenrication priority 100 params 1 */
         add_action('wp_authenticate_user', array(
             $this,
             'login_lockdown'
@@ -52,49 +58,82 @@ class WP_User_Logout_Force_Handler
             'modify_ulf_status_row'
         ) , 10, 3);
 
+        /** @filter load on table sortable columns wanted */
         add_filter('manage_users_sortable_columns', array(
             $this,
             'make_ulf_field_sortable'
         ));
+
+        /** @filter load on sort method wanted */
         add_filter('users_list_table_query_args', array(
             $this,
             'sort_by_login_activity'
         ));
 
+        /** @action triggers on admin enqueue scripts and loads css js */
         add_action('admin_enqueue_scripts', array(
             $this,
             'enqueue_scripts'
         ));
 
+        /** @action triggers on users table wanted and handle request if implemented */
         add_action('load-users.php', array(
             $this,
             'handle_requests'
         ));
+
+        /** @action triggers on users table wanted and handle bulk request actions */
         add_action('load-users.php', array(
             $this,
             'handle_bulk_actions'
         ));
+
+        /** @filter load on bulk actions wanted and add new bulk */
         add_filter('bulk_actions-users', array(
             $this,
             'add_bulk_action'
         ));
+
         // Setting user options
         $this->make_offline_rate = get_option('ulf_make_offline', 1);
         $this->destroy_others_on_login = get_option('ulf_destroy_others', false);
     }
 
+    /**
+     * Adds new method to users table
+     * 
+     * @since   1.0
+     * @param   array   methods
+     * @return  array   modified methods
+     */
     public function include_ulf_method($contact_methods)
     {
         $contact_methods['ulf_status'] = 'ulf_status';
         return $contact_methods;
     }
 
+    /**
+     * Adds new column to users table
+     * 
+     * @since   1.0
+     * @param   array   columns
+     * @return  array   modified columns
+     */
     public function modify_users_table($column)
     {
         $column['ulf_status'] = __('Login Activity', ULF_TEXT_DOMAIN);
         return $column;
     }
 
+    /**
+     * Adds new row for each user in users table
+     * 
+     * @since   1.0
+     * @param   string  value
+     * @param   string  column name
+     * @param   int     user id
+     * @return  string  value
+     */
     public function modify_ulf_status_row($value, $column_name, $user_id)
     {
 
@@ -130,13 +169,27 @@ class WP_User_Logout_Force_Handler
         return $value;
     }
 
-    public function make_ulf_field_sortable($olumns)
+    /**
+     * Makes ulf field sortable
+     * 
+     * @since   1.0
+     * @param   array   columns
+     * @return  array   modified columns
+     */
+    public function make_ulf_field_sortable($columns)
     {
         $columns['ulf_status'] = 'ulf_status';
 
         return $columns;
     }
 
+    /**
+     * Returns is user online or not
+     * 
+     * @since   1.0
+     * @param   int     user id
+     * @return  bool    user status
+     */
     public function is_user_online($user_id)
     {
 
@@ -146,6 +199,12 @@ class WP_User_Logout_Force_Handler
         return isset($logged_in_users[$user_id]) && ($logged_in_users[$user_id] > (time() - ($this->get_make_offline_time() * 60)));
     }
 
+    /**
+     * Enqueue scripts
+     * 
+     * @since   1.0
+     * @return  void
+     */
     public function enqueue_scripts()
     {
         wp_enqueue_style('user-logout-force', plugins_url('dist/css/user-logout-force.css', WP_USER_LOGOUT_FORCE_PLUGIN_FILE) , array() , ULF_ABSPATH, $media = 'all');
@@ -159,8 +218,9 @@ class WP_User_Logout_Force_Handler
     /**
      * Update online users status. Store in transient.
      *
-     * @link  https://wordpress.stackexchange.com/a/34434/126847
-     * @return void.
+     * @since   1.0
+     * @link    https://wordpress.stackexchange.com/a/34434/126847
+     * @return  void.
      */
     public function update_online_users_status()
     {
@@ -188,6 +248,12 @@ class WP_User_Logout_Force_Handler
         }
     }
 
+    /**
+     * Handles users table requests
+     * 
+     * @since   1.0
+     * @return  void
+     */
     public function handle_requests()
     {
 
@@ -218,6 +284,13 @@ class WP_User_Logout_Force_Handler
         }
     }
 
+    /**
+     * Logout single user with user id
+     * 
+     * @since   1.0
+     * @param   int     user id
+     * @return  void
+     */
     private function logout_user($user_id)
     {
 
@@ -227,6 +300,13 @@ class WP_User_Logout_Force_Handler
 
     }
 
+    /**
+     * Logout all users by users id
+     * 
+     * @since   1.0
+     * @see     WP_User_Force_logout::destroy_all_sessions
+     * @return  void
+     */
     private function logout_all_users()
     {
         $users = get_users();
@@ -242,6 +322,12 @@ class WP_User_Logout_Force_Handler
         }
     }
 
+    /**
+     * Handles users table bulk requests
+     * 
+     * @since   1.0
+     * @return  string  redirect url
+     */
     public function handle_bulk_actions()
     {
         if (empty($_REQUEST['users']) || empty($_REQUEST['action'])) return;
@@ -259,6 +345,13 @@ class WP_User_Logout_Force_Handler
         return admin_url('users.php');
     }
 
+    /**
+     * Adds nwe bulk action to users table
+     * 
+     * @since   1.0
+     * @param   array   actions
+     * @return  array   modified actions
+     */
     public function add_bulk_action($actions)
     {
         $actions['ulf-bulk-action'] = esc_html__('Logout', ULF_TEXT_DOMAIN);
@@ -266,6 +359,13 @@ class WP_User_Logout_Force_Handler
         return $actions;
     }
 
+    /**
+     * Sorts users table by last activity
+     * 
+     * @since   1.0
+     * @param   array   args
+     * @return  array   query args
+     */
     public function sort_by_login_activity($args)
     {
         if (isset($args['orderby']) && 'ulf_status' == $args['orderby'])
@@ -286,9 +386,8 @@ class WP_User_Logout_Force_Handler
     /**
      * Store last login info in usermeta table.
      *
-     * @since  1.1.0
-     *
-     * @return void.
+     * @since  1.0
+     * @return void
      */
     public function update_last_login()
     {
@@ -296,6 +395,13 @@ class WP_User_Logout_Force_Handler
         update_user_meta($user_id, 'last_login', time());
     }
 
+    /**
+     * Get last login by user id
+     * 
+     * @since   1.0
+     * @param   int     user id
+     * @return  string  login date
+     */
     public function get_last_login($user_id)
     {
         $last_login = get_user_meta($user_id, 'last_login', true);
@@ -309,6 +415,14 @@ class WP_User_Logout_Force_Handler
         return $the_login_date;
     }
 
+    /**
+     * Handles new login and remove other sessions if enabled on admin
+     * 
+     * @since   1.0
+     * @param   object  user
+     * @param   int     user id
+     * @return  void
+     */
     public function handle_new_login($user, $user_id)
     {
 
@@ -322,6 +436,14 @@ class WP_User_Logout_Force_Handler
 
     }
 
+    /**
+     * Lock downs login page so nobody can login other choosen role
+     * 
+     * @since   1.0
+     * @see     lockdown_whitelist_check
+     * @param   object  user
+     * @return  WP_Error|object
+     */
     public function login_lockdown($user)
     {
 
@@ -343,11 +465,25 @@ class WP_User_Logout_Force_Handler
         return $user;
     }
 
+    /**
+     * Is lock down activated in admin
+     * 
+     * @since   1.0
+     * @return  bool
+     */
     private function is_login_lockdown_active()
     {
         return (get_option('ulf_lock_login', 'no') === 'on') ? true : false;
     }
 
+    /**
+     * Checks white list to see user is valid to login or not
+     * 
+     * @since   1.0
+     * @see     login_lockdown
+     * @param   int     user id
+     * @return  bool    status
+     */
     private function lockdown_whitelist_check($user_id)
     {
         $user_meta = get_userdata($user_id);
@@ -362,11 +498,23 @@ class WP_User_Logout_Force_Handler
         return false;
     }
 
+    /**
+     * Returns make offline option value
+     * 
+     * @since   1.0
+     * @return  int
+     */
     private function get_make_offline_time()
     {
         return $this->make_offline_rate;
     }
 
+    /**
+     * Returns destroy other options value
+     * 
+     * @since   1.0
+     * @return  bool
+     */
     private function destroy_others_on_login()
     {
         return $this->destroy_others_on_login;

@@ -48,6 +48,14 @@ class WP_User_Logout_Force_Options {
         'ulf',
         'ulf_options_section',
     );
+
+    add_settings_field(
+        'ulf_options_fields_lock_login',
+        __( 'Lock login', ULF_TEXT_DOMAIN ),
+        array( $this, 'ulf_options_fields_lock_login' ),
+        'ulf',
+        'ulf_options_section',
+    );
     }
 
     public function ulf_options_section_callback() {
@@ -73,6 +81,19 @@ class WP_User_Logout_Force_Options {
             
             <input type="checkbox" name="destroy_others" default="no" <?php echo $checked; ?>>
             <p>If user logged in with new device or browser remove other sessions and keep only active session.</p>
+        <?php
+    }
+
+    public function ulf_options_fields_lock_login() {
+        $option = get_option('ulf_lock_login');
+        
+        $checked = '';
+        if ( 'on' === $option)
+            $checked = 'checked';
+        ?>
+            
+            <input type="checkbox" name="ulf_lock_login" default="no" <?php echo $checked; ?>>
+            <p>Lock login temporary so no one can login except your own defined users.</p>
         <?php
     }
 
@@ -125,6 +146,18 @@ class WP_User_Logout_Force_Options {
             }else {
                 $_POST['destroy_others'] = 'no';
                 goto add_ulf_destroy;
+            }
+            if ( isset( $_POST['ulf_lock_login']) ) {
+                add_ulf_lock_login:
+                    $option = get_option( 'ulf_lock_login', false);
+                    if ( false === $option ) {
+                        add_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                    }else {
+                        update_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                    }
+            }else {
+                $_POST['ulf_lock_login'] = 'no';
+                goto add_ulf_lock_login;
             }
 
             $_GET['settings-updated'] = true;

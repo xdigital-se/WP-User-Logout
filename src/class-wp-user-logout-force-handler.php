@@ -312,7 +312,7 @@ class WP_User_Logout_Force_Handler {
 		
 		return false;
 	}
-
+	
 	private function get_make_offline_time() {
 		return $this->make_offline_rate;
 	}

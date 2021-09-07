@@ -146,48 +146,57 @@ class WP_User_Logout_Force_Options {
             if ( ! check_admin_referer('ulf-options') )
                 return;
             
-            if ( isset( $_POST['make_offline'] ) ) {
-                if ( false === get_option( 'ulf_make_offline', false) ) {
-                    add_option( 'ulf_make_offline', $_POST['make_offline'] );
-                }else {
-                    update_option( 'ulf_make_offline', $_POST['make_offline'] );
-                }
-            }
+            // Remove all sessions
+            if ( 'Logout All Users' === $_POST['submit'] ) {
 
-            if ( isset( $_POST['destroy_others']) ) {
-                add_ulf_destroy:
-                    $option = get_option( 'ulf_destroy_others', false);
-                    if ( false === $option ) {
-                        add_option( 'ulf_destroy_others', $_POST['destroy_others'] );
-                    }else {
-                        update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
-                    }
+                WP_User_Logout_Force::destroy_all_sessions();
+                $_GET['updated-message'] = __( 'All users logged out successfully', ULF_TEXT_DOMAIN );
+
             }else {
-                $_POST['destroy_others'] = 'no';
-                goto add_ulf_destroy;
-            }
-
-            if ( isset( $_POST['ulf_lock_login']) ) {
-                add_ulf_lock_login:
-                    $option = get_option( 'ulf_lock_login', false);
-                    if ( false === $option ) {
-                        add_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                if ( isset( $_POST['make_offline'] ) ) {
+                    if ( false === get_option( 'ulf_make_offline', false) ) {
+                        add_option( 'ulf_make_offline', $_POST['make_offline'] );
                     }else {
-                        update_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                        update_option( 'ulf_make_offline', $_POST['make_offline'] );
                     }
-            }else {
-                $_POST['ulf_lock_login'] = 'no';
-                goto add_ulf_lock_login;
+                }
+    
+                if ( isset( $_POST['destroy_others']) ) {
+                    add_ulf_destroy:
+                        $option = get_option( 'ulf_destroy_others', false);
+                        if ( false === $option ) {
+                            add_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                        }else {
+                            update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                        }
+                }else {
+                    $_POST['destroy_others'] = 'no';
+                    goto add_ulf_destroy;
+                }
+    
+                if ( isset( $_POST['ulf_lock_login']) ) {
+                    add_ulf_lock_login:
+                        $option = get_option( 'ulf_lock_login', false);
+                        if ( false === $option ) {
+                            add_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                        }else {
+                            update_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                        }
+                }else {
+                    $_POST['ulf_lock_login'] = 'no';
+                    goto add_ulf_lock_login;
+                }
+    
+                if ( isset( $_POST['login_whitelist'] ) ) {
+                    if ( false === get_option( 'ulf_login_while_list', false) ) {
+                        add_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
+                    }else {
+                        update_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
+                    }
+                }
+                $_GET['updated-message'] = __( 'Settings Saved', ULF_TEXT_DOMAIN );
             }
 
-            if ( isset( $_POST['login_whitelist'] ) ) {
-                if ( false === get_option( 'ulf_login_while_list', false) ) {
-                    add_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
-                }else {
-                    update_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
-                }
-            }
-            
             $_GET['settings-updated'] = true;
         }
         
@@ -195,7 +204,7 @@ class WP_User_Logout_Force_Options {
 
         if ( isset( $_GET['settings-updated'] ) ) {
             // add settings saved message with the class of "updated"
-            add_settings_error( 'ulf_messages', 'ulf_message', __( 'Settings Saved', ULF_TEXT_DOMAIN ), 'updated' );
+            add_settings_error( 'ulf_messages', 'ulf_message', $_GET['updated-message'], 'updated' );
         }
      
         // show error/update messages
@@ -212,6 +221,7 @@ class WP_User_Logout_Force_Options {
 
                     // output save settings button
                     submit_button( 'Save Settings' );
+                    submit_button( __( 'Logout All Users', ULF_TEXT_DOMAIN ), 'secondary' );
                     ?>
                 </form>
             </div>

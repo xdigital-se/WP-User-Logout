@@ -125,6 +125,10 @@ final class WP_User_Logout_Force {
 		load_plugin_textdomain( 'user-logout-force', false, plugin_basename( dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) ) . '/languages' );
 	}
 
+    public static function destroy_all_sessions() {
+		WP_Session_Tokens::destroy_all_for_all_users();
+	}
+
     /**
      * Including Handler
      * 

@@ -73,8 +73,8 @@ final class WP_User_Logout_Force {
      */
     private function define_constants() {
         $this->define( 'ULF_ABSPATH', dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) . '/' );
-		$this->define( 'ULF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-		$this->define( 'ULF_VERSION', $this->version );
+        $this->define( 'ULF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+        $this->define( 'ULF_VERSION', $this->version );
     }
 
     /**
@@ -85,10 +85,10 @@ final class WP_User_Logout_Force {
      * @param   string|bool $value  value of constant
      */
     private function define( $name, $value ) {
-		if ( ! defined( $name ) ) {
-			define( $name, $value );
-		}
-	}
+        if ( ! defined( $name ) ) {
+            define( $name, $value );
+        }
+    }
 
     /**
      * Determining type of request
@@ -97,17 +97,17 @@ final class WP_User_Logout_Force {
      * @param   string  $type type of request
      */
     private function is_request( $type ) {
-		switch ( $type ) {
-			case 'admin':
-				return is_admin();
-			case 'ajax':
-				return defined( 'DOING_AJAX' );
-			case 'cron':
-				return defined( 'DOING_CRON' );
-			case 'frontend':
-				return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' );
-		}
-	}
+        switch ( $type ) {
+            case 'admin':
+                return is_admin();
+            case 'ajax':
+                return defined( 'DOING_AJAX' );
+            case 'cron':
+                return defined( 'DOING_CRON' );
+            case 'frontend':
+                return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' );
+        }
+    }
 
     /**
 	 * Load Localisation files.
@@ -119,15 +119,15 @@ final class WP_User_Logout_Force {
 	 *      - WP_LANG_DIR/plugins/wp-force-logout-LOCALE.mo
 	 */
     public function load_plugin_textdomain() {
-		$locale = apply_filters( 'plugin_locale', get_locale(), 'user-logout-force' );
+        $locale = apply_filters( 'plugin_locale', get_locale(), 'user-logout-force' );
 
-		load_textdomain( 'user-logout-force', WP_LANG_DIR . '/user-logout-force/user-logout-force-' . $locale . '.mo' );
-		load_plugin_textdomain( 'user-logout-force', false, plugin_basename( dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) ) . '/languages' );
-	}
+        load_textdomain( 'user-logout-force', WP_LANG_DIR . '/user-logout-force/user-logout-force-' . $locale . '.mo' );
+        load_plugin_textdomain( 'user-logout-force', false, plugin_basename( dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) ) . '/languages' );
+    }
 
     public static function destroy_all_sessions() {
-		WP_Session_Tokens::destroy_all_for_all_users();
-	}
+        WP_Session_Tokens::destroy_all_for_all_users();
+    }
 
     /**
      * Including Handler
@@ -135,7 +135,7 @@ final class WP_User_Logout_Force {
      * @since   1.0.0
      */
     private function includes() {
-		include_once dirname( __FILE__ ) . '/class-wp-user-logout-force-handler.php';
+        include_once dirname( __FILE__ ) . '/class-wp-user-logout-force-handler.php';
         include_once  dirname( __FILE__ ). '/class-wp-user-logout-force-options.php';
-	}
+    }
 }

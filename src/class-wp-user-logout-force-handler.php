@@ -16,7 +16,11 @@ class WP_User_Logout_Force_Handler {
         add_action( 'init', array( $this, 'update_online_users_status' ) );
         add_action( 'init', array( $this, 'update_last_login' ) );
 
-		add_action( 'wp_login', array( $this, 'handle_new_login' ), 10, 2 );
+		add_action( 'wp_login', array( $this, 'handle_new_login' ), 99, 2 );
+
+		add_action( 'wp_authenticate_user', array( $this, 'login_lockdown' ), 100, 1);
+
+		add_filter('login_redirect', array( $this, 'login_redirect_filter_handler' ), 10, 3);
 
         // Returning if user don't have caps or page is not users page
         if ( 'users.php' !== $pagenow || ! $this->user_has_cap() )
@@ -270,6 +274,37 @@ class WP_User_Logout_Force_Handler {
 			$sessions->destroy_others( $token );
 		}
 
+	}
+
+	public function login_lockdown( $user ) {
+		if ( is_wp_error( $user ) ) {
+			return $user;
+		}
+
+		// Is user role is in white list or not
+		$failure = $this->lockdown_whitelist_check( $user->ID );
+		
+		if ( ! $failure ) {
+			return new WP_Error( 'ulf_login_lockdown', __( "Sorry, Login is disabled right now. Try again in few minutes.", ULF_TEXT_DOMAIN ) );
+		}
+	
+		return $user;
+	}
+
+	private function lockdown_whitelist_check( $user_id ) {
+		$user_meta	=	get_userdata($user_id);
+		$user_role	=	$user_meta->roles;
+
+		$white_role = get_option( 'ulf_login_while_list', false);
+		
+		if ( false === $white_role )
+			return true;
+
+		foreach ($user_role as $role)
+			if ( $white_role === $role)
+				return true;
+		
+		return false;
 	}
 
 	private function get_make_offline_time() {

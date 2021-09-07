@@ -101,7 +101,7 @@ class WP_User_Logout_Force_Options {
         ?>
             
             <input type="checkbox" name="ulf_lock_login" default="no" <?php echo $checked; ?>>
-            <p>Lock login temporary so no one can login except your own defined users.</p>
+            <p>Lock login temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users logged out after this you can use Logout All Users button.</p>
         <?php
     }
 
@@ -112,6 +112,7 @@ class WP_User_Logout_Force_Options {
             <select name="login_whitelist">
                 <?php wp_dropdown_roles($selected); ?>
             </select>
+            <p>Users with this role can login even if Lockdown is enabled.</p>
         <?php
     }
 

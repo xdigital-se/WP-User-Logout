@@ -26,6 +26,8 @@ final class WP_User_Logout_Force {
      */
     public static function get_instance() {
 
+        do_action( 'ulf_before_load' );
+
         if ( is_null( self::$instance ) )
             self::$instance = new self();
 
@@ -132,7 +134,9 @@ final class WP_User_Logout_Force {
      * @return  void
      */
     public static function destroy_all_sessions() {
+        do_action( 'before_ulf_destroy_all_sessions_for_all_users' );
         WP_Session_Tokens::destroy_all_for_all_users();
+        do_action( 'after_ulf_destroy_all_sessions_for_all_users' );
     }
 
     /**

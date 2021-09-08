@@ -2,7 +2,7 @@
 /**
  * Plugin Name: User logout force
  * Description: See online users and logout all users.
- * Version: 1..0
+ * Version: 1.0
  * Author: xdigital
  * Author URI: https://www.xdigital.se
  * Text Domain: user-logout-force
@@ -27,4 +27,4 @@ if ( !class_exists( 'WP_User_Logout_Force' ) )
     require_once __DIR__ . '/src/class-wp-user-logout-force.php';
 
 // Initialize plugin
-add_action( 'plugins_loaded', array( 'WP_User_Logout_Force', 'get_instance' ) );
+add_action( 'after_setup_theme', array( 'WP_User_Logout_Force', 'get_instance' ) );

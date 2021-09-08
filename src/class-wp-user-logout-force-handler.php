@@ -107,6 +107,8 @@ class WP_User_Logout_Force_Handler
         // Setting user options
         $this->make_offline_rate = get_option('ulf_make_offline', 1);
         $this->destroy_others_on_login = get_option('ulf_destroy_others', false);
+
+        do_action('ulf_after_load');
     }
 
     /**
@@ -151,6 +153,7 @@ class WP_User_Logout_Force_Handler
         {
 
             $is_user_online = $this->is_user_online($user_id);
+            $last_login = $this->get_last_login($user_id);
 
             if ($is_user_online)
             {
@@ -169,12 +172,15 @@ class WP_User_Logout_Force_Handler
             }
             else
             {
-                $last_login = $this->get_last_login($user_id);
                 $value = '<span class="offline-circle">' . esc_html__('Offline ', ULF_TEXT_DOMAIN);
                 $value .= '</br>' . esc_html__('Last Login: ', ULF_TEXT_DOMAIN);
                 $value .= !empty($last_login) ? $last_login . ' ago' : esc_html__('Never', ULF_TEXT_DOMAIN) . '</span>';
             }
         }
+
+        do_action('before_ulf_status_row_out');
+        $value = apply_filters( 'ulf_row_status', $value, $is_user_online, $last_login);
+        do_action('after_ulf_status_row_out');
 
         return $value;
     }
@@ -266,6 +272,9 @@ class WP_User_Logout_Force_Handler
      */
     public function handle_requests()
     {
+        do_action( 'before_ulf_handle_request' );
+
+        $redirect = apply_filters( 'ulf_redirect_after_request', 'users.php' );
 
         if (isset($_REQUEST['action']) && 'logout_all' === $_REQUEST['action'])
         {
@@ -274,7 +283,7 @@ class WP_User_Logout_Force_Handler
             // Logout all users
             $this->logout_all_users();
 
-            wp_safe_redirect(admin_url('users.php'));
+            wp_safe_redirect(admin_url($redirect));
             exit();
         }
 
@@ -289,7 +298,7 @@ class WP_User_Logout_Force_Handler
 
             $this->logout_user((isset($_GET['user']) ? absint($_GET['user']) : 0));
 
-            wp_redirect('users.php');
+            wp_redirect($redirect);
             exit();
         }
     }
@@ -303,11 +312,11 @@ class WP_User_Logout_Force_Handler
      */
     private function logout_user($user_id)
     {
-
+        do_action('before_ulf_logout_user');
         $sessions = WP_Session_Tokens::get_instance($user_id);
 
         $sessions->destroy_all();
-
+        do_action('after_ulf_logout_user');
     }
 
     /**
@@ -319,6 +328,7 @@ class WP_User_Logout_Force_Handler
      */
     private function logout_all_users()
     {
+        do_action('before_ulf_logout_all_users');
         $users = get_users();
 
         foreach ($users as $user)
@@ -330,6 +340,7 @@ class WP_User_Logout_Force_Handler
             // We have got the sessions, destroy them all!
             $sessions->destroy_all();
         }
+        do_action('after_ulf_logout_all_users');
     }
 
     /**
@@ -340,6 +351,9 @@ class WP_User_Logout_Force_Handler
      */
     public function handle_bulk_actions()
     {
+
+        $redirect = apply_filters( 'ulf_redirect_after_bulk_request', 'users.php' );
+
         if (empty($_REQUEST['users']) || empty($_REQUEST['action'])) return;
 
         if ('ulf-bulk-action' !== $_REQUEST['action']) return;
@@ -352,7 +366,7 @@ class WP_User_Logout_Force_Handler
             $this->logout_user($user);
         }
 
-        return admin_url('users.php');
+        return admin_url($redirect);
     }
 
     /**
@@ -401,8 +415,12 @@ class WP_User_Logout_Force_Handler
      */
     public function update_last_login()
     {
+        do_action( 'before_ulf_update_last_login' );
+
         $user_id = get_current_user_id();
         update_user_meta($user_id, 'last_login', time());
+
+        do_action( 'after_ulf_update_last_login' );
     }
 
     /**
@@ -422,6 +440,8 @@ class WP_User_Logout_Force_Handler
             $the_login_date = human_time_diff($last_login);
         }
 
+        $the_login_date = apply_filters( 'ulf_last_login', $the_login_date, $last_login );
+
         return $the_login_date;
     }
 
@@ -438,10 +458,12 @@ class WP_User_Logout_Force_Handler
 
         if ($this->destroy_others_on_login())
         {
+            do_action( 'before_ulf_destroy_others' );
             $sessions = WP_Session_Tokens::get_instance($user_id);
             $token = wp_get_session_token();
 
             $sessions->destroy_others($token);
+            do_action( 'after_ulf_destroy_others' );
         }
 
     }
@@ -464,13 +486,17 @@ class WP_User_Logout_Force_Handler
             return $user;
         }
 
+        add_action( 'before_ulf_lockdown' );
+
         // Is user role is in white list or not
         $failure = $this->lockdown_whitelist_check($user->ID);
 
         if (!$failure)
         {
-            return new WP_Error('ulf_login_lockdown', __("Sorry, Login is disabled right now. Try again in few minutes.", ULF_TEXT_DOMAIN));
+            return new WP_Error('ulf_login_lockdown', apply_filters( 'ulf_lockdown_message', __("Sorry, Login is disabled right now. Try again in few minutes.", ULF_TEXT_DOMAIN)));
         }
+
+        add_action( 'after_ulf_lockdown' );
 
         return $user;
     }

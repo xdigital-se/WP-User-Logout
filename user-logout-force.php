@@ -11,7 +11,7 @@
  * @package    ulf
  * @author     Amirhossein Meydani
  * @since      1.0.0
- * @license    MIT
+ * @license    GPLv3
  */
 
 defined( 'ABSPATH' ) or die(); // Exit if called directly

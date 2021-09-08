@@ -5,7 +5,7 @@
  * @since   1.0
  * @package ulf
  * @author  Amirhosse Meydani
- * @license MIT
+ * @license GPLv3
  */
 
 defined('ABSPATH') or die(); // Exit if called directly
@@ -486,7 +486,7 @@ class WP_User_Logout_Force_Handler
             return $user;
         }
 
-        add_action( 'before_ulf_lockdown' );
+        do_action( 'before_ulf_lockdown' );
 
         // Is user role is in white list or not
         $failure = $this->lockdown_whitelist_check($user->ID);
@@ -496,7 +496,7 @@ class WP_User_Logout_Force_Handler
             return new WP_Error('ulf_login_lockdown', apply_filters( 'ulf_lockdown_message', __("Sorry, Login is disabled right now. Try again in few minutes.", ULF_TEXT_DOMAIN)));
         }
 
-        add_action( 'after_ulf_lockdown' );
+        do_action( 'after_ulf_lockdown' );
 
         return $user;
     }

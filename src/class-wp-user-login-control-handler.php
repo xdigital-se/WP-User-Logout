@@ -524,6 +524,9 @@ class WP_User_Login_Control_Handler
     {
         $user_meta = get_userdata($user_id);
         $user_role = $user_meta->roles;
+        
+        if ( $user_role === 'Administrator' )
+            return true;
 
         $white_role = get_option('ulf_login_while_list', false);
 

@@ -86,7 +86,7 @@ class WP_User_Login_Control_Options {
     public function ulf_options_fields_offline() {
         ?>
             <input type="number" name="make_offline" default="1" placeholder="1" value="<?php echo esc_attr( get_option('ulf_make_offline', 1) ); ?>">
-            <p>Make user offline in how much time of inactivity?</p>
+            <p>Make user offline in how much time of inactivity? ( In Minute )</p>
         <?php
     }
 
@@ -117,7 +117,7 @@ class WP_User_Login_Control_Options {
     }
 
     public function ulf_options_fields_login_whitelist_cb() {
-        
+
         // Default is Administrator
         $selected = get_option( 'ulf_login_while_list', 'Administrator' );
 

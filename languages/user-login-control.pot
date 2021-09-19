@@ -74,11 +74,11 @@ msgid "Destroy other sessions"
 msgstr ""
 
 #: src/class-wp-user-login-control-options:65
-msgid "Lock login"
+msgid "Lockdown"
 msgstr ""
 
 #: src/class-wp-user-login-control-options:73
-msgid "Login white list"
+msgid "Login Whitelist"
 msgstr ""
 
 #: src/class-wp-user-login-control-options:82
@@ -86,15 +86,15 @@ msgid "User Login Control Options and settings"
 msgstr ""
 
 #: src/class-wp-user-login-control-options:89
-msgid "Make user offline in how much time of inactivity? ( In Minute )"
+msgid "How many minutes of inactivity before user should be logged out?"
 msgstr ""
 
 #: src/class-wp-user-login-control-options:102
-msgid "If user logged in with new device or browser remove other sessions and keep only active session."
+msgid "If the user logged in with a new device or browser log out from other sessions and only keep the active session."
 msgstr ""
 
 #: src/class-wp-user-login-control-options:115
-msgid "Lock login temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users logged out after this you can use Logout All Users button."
+msgid "Lock login availability temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users to log out you can use the Logout All Users button."
 msgstr ""
 
 #: src/class-wp-user-login-control-options:128
@@ -102,7 +102,7 @@ msgid "Users with this role can login even if Lockdown is enabled."
 msgstr ""
 
 #: src/class-wp-user-login-control-options:167
-msgid "All users logged out successfully"
+msgid "All users logged out successfully."
 msgstr ""
 
 #: src/class-wp-user-login-control-options:211

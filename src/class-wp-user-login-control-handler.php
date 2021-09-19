@@ -10,7 +10,7 @@
 
 defined('ABSPATH') or die(); // Exit if called directly
 
-class WP_User_Logout_Force_Handler
+class WP_User_Login_Control_Handler
 {
 
     private $make_offline_rate = 1;
@@ -133,7 +133,7 @@ class WP_User_Logout_Force_Handler
      */
     public function modify_users_table($column)
     {
-        $column['ulf_status'] = __('Login Activity', ULF_TEXT_DOMAIN);
+        $column['ulf_status'] = __('Login Activity', USER_LOGIN_CONTROL_TEXT_DOMAIN);
         return $column;
     }
 
@@ -166,15 +166,15 @@ class WP_User_Logout_Force_Handler
                 ) , $logout_link);
                 $logout_link = wp_nonce_url($logout_link, 'ulf-logout-single');
 
-                $value = '<span class="online-circle">' . esc_html__('Online', ULF_TEXT_DOMAIN) . '</span>';
+                $value = '<span class="online-circle">' . esc_html__('Online', USER_LOGIN_CONTROL_TEXT_DOMAIN) . '</span>';
                 $value .= ' </br>';
-                $value .= '<a style="color:red" href="' . esc_url($logout_link) . '">' . _x('Logout', 'The action on users list page', ULF_TEXT_DOMAIN) . '</a>';
+                $value .= '<a style="color:red" href="' . esc_url($logout_link) . '">' . _x('Logout', 'The action on users list page', USER_LOGIN_CONTROL_TEXT_DOMAIN) . '</a>';
             }
             else
             {
-                $value = '<span class="offline-circle">' . esc_html__('Offline ', ULF_TEXT_DOMAIN);
-                $value .= '</br>' . esc_html__('Last Login: ', ULF_TEXT_DOMAIN);
-                $value .= !empty($last_login) ? $last_login . ' ago' : esc_html__('Never', ULF_TEXT_DOMAIN) . '</span>';
+                $value = '<span class="offline-circle">' . esc_html__('Offline ', USER_LOGIN_CONTROL_TEXT_DOMAIN);
+                $value .= '</br>' . esc_html__('Last Login: ', USER_LOGIN_CONTROL_TEXT_DOMAIN);
+                $value .= !empty($last_login) ? $last_login . ' ago' : esc_html__('Never', USER_LOGIN_CONTROL_TEXT_DOMAIN) . '</span>';
             }
         }
 
@@ -223,9 +223,9 @@ class WP_User_Logout_Force_Handler
      */
     public function enqueue_scripts()
     {
-        wp_enqueue_style('user-logout-force', plugins_url('dist/css/user-logout-force.css', WP_USER_LOGOUT_FORCE_PLUGIN_FILE) , array() , ULF_ABSPATH, $media = 'all');
-        wp_enqueue_script('user-logout-force-js', plugins_url('dist/js/script.js', WP_USER_LOGOUT_FORCE_PLUGIN_FILE) , array() , ULF_ABSPATH, false);
-        wp_localize_script('user-logout-force-js', 'ulf_plugins_params', array(
+        wp_enqueue_style('user-login-control', plugins_url('dist/css/user-login-control.css', USER_LOGIN_CONTROL_FILE) , array() , ULF_ABSPATH, $media = 'all');
+        wp_enqueue_script('user-login-control-js', plugins_url('dist/js/script.js', USER_LOGIN_CONTROL_FILE) , array() , ULF_ABSPATH, false);
+        wp_localize_script('user-login-control-js', 'ulf_plugins_params', array(
             'ajax_url' => admin_url('admin-ajax.php') ,
             'review_nonce' => wp_create_nonce('review-notice') ,
         ));
@@ -278,7 +278,7 @@ class WP_User_Logout_Force_Handler
 
         if (isset($_REQUEST['action']) && 'logout_all' === $_REQUEST['action'])
         {
-            check_admin_referer('user-logout-force-nonce');
+            check_admin_referer('user-login-control-nonce');
 
             // Logout all users
             $this->logout_all_users();
@@ -378,7 +378,7 @@ class WP_User_Logout_Force_Handler
      */
     public function add_bulk_action($actions)
     {
-        $actions['ulf-bulk-action'] = esc_html__('Logout', ULF_TEXT_DOMAIN);
+        $actions['ulf-bulk-action'] = esc_html__('Logout', USER_LOGIN_CONTROL_TEXT_DOMAIN);
 
         return $actions;
     }
@@ -493,7 +493,7 @@ class WP_User_Logout_Force_Handler
 
         if (!$failure)
         {
-            return new WP_Error('ulf_login_lockdown', apply_filters( 'ulf_lockdown_message', __("Sorry, Login is disabled right now. Try again in few minutes.", ULF_TEXT_DOMAIN)));
+            return new WP_Error('ulf_login_lockdown', apply_filters( 'ulf_lockdown_message', __("Sorry, Login is disabled right now. Try again in few minutes.", USER_LOGIN_CONTROL_TEXT_DOMAIN)));
         }
 
         do_action( 'after_ulf_lockdown' );
@@ -578,5 +578,5 @@ class WP_User_Logout_Force_Handler
     }
 }
 
-new WP_User_Logout_Force_Handler();
+new WP_User_Login_Control_Handler();
 

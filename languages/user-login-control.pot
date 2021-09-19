@@ -13,6 +13,6 @@ msgstr ""
 "Language-Team: xdigital <developers@xdigital.se>\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: src/class-wp-user-logout-force-handler.php:25
+#: src/class-wp-user-login-control-handler.php:25
 msgid "Login Activity"
 msgstr ""

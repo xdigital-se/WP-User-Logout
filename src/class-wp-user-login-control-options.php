@@ -11,7 +11,7 @@
 defined('ABSPATH') or die(); // Exit if called directly
 
 
-class WP_User_Logout_Force_Options {
+class WP_User_Login_Control_Options {
     
     private $options;
 
@@ -23,8 +23,8 @@ class WP_User_Logout_Force_Options {
     public function add_submenu_page() {
         add_submenu_page(
             'users.php',
-            'User Logout Force Options',
-            'User Logout Force Options',
+            'User Login Control Options',
+            'User Login Control Options',
             'edit_users',
             'ulf-options',
             array( $this, 'display'));
@@ -38,7 +38,7 @@ class WP_User_Logout_Force_Options {
  
     add_settings_section(
         'ulf_options_section',
-        __( 'User Logout Force Options', ULF_TEXT_DOMAIN ),
+        __( 'User Login Control Options', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
          array( $this, 'ulf_options_section_callback' ),
         'ulf'
     );
@@ -46,7 +46,7 @@ class WP_User_Logout_Force_Options {
     // Register a new field in the "wporg_section_developers" section, inside the "wporg" page.
     add_settings_field(
         'ulf_options_fields_offline',
-        __( 'Make Offline', ULF_TEXT_DOMAIN ),
+        __( 'Make Offline', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
         array( $this, 'ulf_options_fields_offline' ),
         'ulf',
         'ulf_options_section',
@@ -54,7 +54,7 @@ class WP_User_Logout_Force_Options {
 
     add_settings_field(
         'ulf_options_fields_destroy_other_sessions',
-        __( 'Destroy other sessions', ULF_TEXT_DOMAIN ),
+        __( 'Destroy other sessions', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
         array( $this, 'ulf_options_fields_destroy_other_sessions' ),
         'ulf',
         'ulf_options_section',
@@ -62,7 +62,7 @@ class WP_User_Logout_Force_Options {
 
     add_settings_field(
         'ulf_options_fields_lock_login',
-        __( 'Lock login', ULF_TEXT_DOMAIN ),
+        __( 'Lock login', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
         array( $this, 'ulf_options_fields_lock_login' ),
         'ulf',
         'ulf_options_section',
@@ -70,7 +70,7 @@ class WP_User_Logout_Force_Options {
 
     add_settings_field(
         'ulf_options_fields_login_whitelist',
-        __( 'Login white list', ULF_TEXT_DOMAIN ),
+        __( 'Login white list', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
         array( $this, 'ulf_options_fields_login_whitelist_cb' ),
         'ulf',
         'ulf_options_section',
@@ -79,7 +79,7 @@ class WP_User_Logout_Force_Options {
 
     public function ulf_options_section_callback() {
         ?>
-            <p>User logout force options and settings</p>
+            <p>User Login Control Options and settings</p>
         <?php
     }
 
@@ -161,8 +161,8 @@ class WP_User_Logout_Force_Options {
             // Remove all sessions
             if ( 'Logout All Users' === $_POST['submit'] ) {
 
-                WP_User_Logout_Force::destroy_all_sessions();
-                $_GET['updated-message'] = __( 'All users logged out successfully', ULF_TEXT_DOMAIN );
+                WP_User_Login_Control::destroy_all_sessions();
+                $_GET['updated-message'] = __( 'All users logged out successfully', USER_LOGIN_CONTROL_TEXT_DOMAIN );
 
             }else {
                 if ( isset( $_POST['make_offline'] ) ) {
@@ -206,7 +206,7 @@ class WP_User_Logout_Force_Options {
                         update_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
                     }
                 }
-                $_GET['updated-message'] = __( 'Settings Saved', ULF_TEXT_DOMAIN );
+                $_GET['updated-message'] = __( 'Settings Saved', USER_LOGIN_CONTROL_TEXT_DOMAIN );
             }
 
             $_GET['settings-updated'] = true;
@@ -233,7 +233,7 @@ class WP_User_Logout_Force_Options {
 
                     // output save settings button
                     submit_button( 'Save Settings' );
-                    submit_button( __( 'Logout All Users', ULF_TEXT_DOMAIN ), 'secondary' );
+                    submit_button( __( 'Logout All Users', USER_LOGIN_CONTROL_TEXT_DOMAIN ), 'secondary' );
                     ?>
                 </form>
             </div>
@@ -242,4 +242,4 @@ class WP_User_Logout_Force_Options {
 }
 
 if ( is_admin() )
-    new WP_User_Logout_Force_Options();
+    new WP_User_Login_Control_Options();

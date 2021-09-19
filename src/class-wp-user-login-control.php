@@ -10,7 +10,7 @@
 
 defined( 'ABSPATH' ) or die(); // Exit if called directly
 
-final class WP_User_Logout_Force {
+final class WP_User_Login_Control {
     
     /** @var string ULF version */
     public $version = '1.0.0';
@@ -41,7 +41,7 @@ final class WP_User_Logout_Force {
      * @since 1.0.0
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, __( 'You cannot clone an instance of WP_User_Logout_Force', ULF_TEXT_DOMAIN ), '1.0.0' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        _doing_it_wrong( __FUNCTION__, __( 'You cannot clone an instance of WP_User_Login_Control', USER_LOGIN_CONTROL_TEXT_DOMAIN ), '1.0.0' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     /**
@@ -50,7 +50,7 @@ final class WP_User_Logout_Force {
      * @since 1.0.0
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, __( 'You cannot clone an instance of WP_User_Logout_Force', ULF_TEXT_DOMAIN ), '1.0.0' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        _doing_it_wrong( __FUNCTION__, __( 'You cannot clone an instance of WP_User_Login_Control', USER_LOGIN_CONTROL_TEXT_DOMAIN ), '1.0.0' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     /**
@@ -74,7 +74,7 @@ final class WP_User_Logout_Force {
      * @since 1.0.0
      */
     private function define_constants() {
-        $this->define( 'ULF_ABSPATH', dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) . '/' );
+        $this->define( 'ULF_ABSPATH', dirname( USER_LOGIN_CONTROL_FILE ) . '/' );
         $this->define( 'ULF_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
         $this->define( 'ULF_VERSION', $this->version );
     }
@@ -121,10 +121,10 @@ final class WP_User_Logout_Force {
 	 *      - WP_LANG_DIR/plugins/wp-force-logout-LOCALE.mo
 	 */
     public function load_plugin_textdomain() {
-        $locale = apply_filters( 'plugin_locale', get_locale(), 'user-logout-force' );
+        $locale = apply_filters( 'plugin_locale', get_locale(), 'user-login-control' );
 
-        load_textdomain( 'user-logout-force', WP_LANG_DIR . '/user-logout-force/user-logout-force-' . $locale . '.mo' );
-        load_plugin_textdomain( 'user-logout-force', false, plugin_basename( dirname( WP_USER_LOGOUT_FORCE_PLUGIN_FILE ) ) . '/languages' );
+        load_textdomain( 'user-login-control', WP_LANG_DIR . '/user-login-control/user-login-control-' . $locale . '.mo' );
+        load_plugin_textdomain( 'user-login-control', false, plugin_basename( dirname( USER_LOGIN_CONTROL_FILE ) ) . '/languages' );
     }
 
     /**
@@ -145,7 +145,7 @@ final class WP_User_Logout_Force {
      * @since   1.0.0
      */
     private function includes() {
-        include_once dirname( __FILE__ ) . '/class-wp-user-logout-force-handler.php';
-        include_once dirname( __FILE__ ). '/class-wp-user-logout-force-options.php';
+        include_once dirname( __FILE__ ) . '/class-wp-user-login-control-handler.php';
+        include_once dirname( __FILE__ ). '/class-wp-user-login-control-options.php';
     }
 }

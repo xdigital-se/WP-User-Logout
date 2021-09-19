@@ -117,7 +117,9 @@ class WP_User_Login_Control_Options {
     }
 
     public function ulf_options_fields_login_whitelist_cb() {
-        $selected = get_option( 'ulf_login_while_list','' );
+        
+        // Default is Administrator
+        $selected = get_option( 'ulf_login_while_list', 'Administrator' );
 
         ?>
             <select name="login_whitelist">

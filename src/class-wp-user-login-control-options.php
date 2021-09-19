@@ -234,7 +234,7 @@ class WP_User_Login_Control_Options {
                     do_settings_sections( 'ulf' );
 
                     // output save settings button
-                    submit_button( 'Save Settings' );
+                    submit_button( __( 'Save Settings', USER_LOGIN_CONTROL_TEXT_DOMAIN ) );
                     submit_button( __( 'Logout All Users', USER_LOGIN_CONTROL_TEXT_DOMAIN ), 'secondary' );
                     ?>
                 </form>

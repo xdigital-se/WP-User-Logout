@@ -113,6 +113,10 @@ msgstr ""
 msgid "Logout All Users"
 msgstr ""
 
+#: src/class-wp-user-login-control-options:237
+msgid "Save Settings"
+msgstr ""
+
 #: src/class-wp-user-login-control:44
 msgid "You cannot clone an instance of WP_User_Login_Control"
 msgstr ""

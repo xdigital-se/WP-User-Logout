@@ -1,6 +1,6 @@
 # User Logout Force
 
-User Logout Force allows you to logout user(s) from their account or to see the last activity of your offline users. You can also lock login availability so that no one can login other than your chosen role (administrator i.e) and to have a custom message for those unable to login.
+User Logout Force is a WordPress plugin allows you to logout user(s) from their account or to see the last activity of your offline users. You can also lock login availability so that no one can login other than your chosen role (administrator i.e) and to have a custom message for those unable to login.
 
 You can customize offline time as well for those users that were not active for the marked duration. If they are not active during the marked duration they will be logged out automatically. One additional feature is that you can manage user sessions and destroy other sessions when the user logs in with a new browser or device.
 

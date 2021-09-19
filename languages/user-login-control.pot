@@ -13,6 +13,110 @@ msgstr ""
 "Language-Team: xdigital <developers@xdigital.se>\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
 
-#: src/class-wp-user-login-control-handler.php:25
+#: src/class-wp-user-login-control-handler.php:136
 msgid "Login Activity"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:169
+msgid "Online"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:171
+msgid "Logout"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:175
+msgid "Offline"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:176
+msgid "Last Login: "
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:177
+msgid "Never"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:177
+msgid "Never"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:177
+msgid " ago"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:381
+msgid "Logout"
+msgstr ""
+
+#: src/class-wp-user-login-control-handler.php:496
+msgid "Sorry, Login is disabled right now. Try again in few minutes."
+msgstr ""
+
+#: src/class-wp-user-login-control-options:26
+msgid "User Login Control Options"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:27
+msgid "User Login Control Options"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:41
+msgid "User Login Control Options"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:49
+msgid "Make Offline"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:57
+msgid "Destroy other sessions"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:65
+msgid "Lock login"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:73
+msgid "Login white list"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:82
+msgid "User Login Control Options and settings"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:89
+msgid "Make user offline in how much time of inactivity? ( In Minute )"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:102
+msgid "If user logged in with new device or browser remove other sessions and keep only active session."
+msgstr ""
+
+#: src/class-wp-user-login-control-options:115
+msgid "Lock login temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users logged out after this you can use Logout All Users button."
+msgstr ""
+
+#: src/class-wp-user-login-control-options:128
+msgid "Users with this role can login even if Lockdown is enabled."
+msgstr ""
+
+#: src/class-wp-user-login-control-options:167
+msgid "All users logged out successfully"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:211
+msgid "Settings Saved"
+msgstr ""
+
+#: src/class-wp-user-login-control-options:238
+msgid "Logout All Users"
+msgstr ""
+
+#: src/class-wp-user-login-control:44
+msgid "You cannot clone an instance of WP_User_Login_Control"
+msgstr ""
+
+#: src/class-wp-user-login-control:53
+msgid "You cannot clone an instance of WP_User_Login_Control"
 msgstr ""

@@ -174,7 +174,7 @@ class WP_User_Login_Control_Handler
             {
                 $value = '<span class="offline-circle">' . esc_html__('Offline ', USER_LOGIN_CONTROL_TEXT_DOMAIN);
                 $value .= '</br>' . esc_html__('Last Login: ', USER_LOGIN_CONTROL_TEXT_DOMAIN);
-                $value .= !empty($last_login) ? $last_login . ' ago' : esc_html__('Never', USER_LOGIN_CONTROL_TEXT_DOMAIN) . '</span>';
+                $value .= !empty($last_login) ? $last_login . __(' ago', USER_LOGIN_CONTROL_TEXT_DOMAIN ) : esc_html__('Never', USER_LOGIN_CONTROL_TEXT_DOMAIN) . '</span>';
             }
         }
 

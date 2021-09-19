@@ -23,8 +23,8 @@ class WP_User_Login_Control_Options {
     public function add_submenu_page() {
         add_submenu_page(
             'users.php',
-            'User Login Control Options',
-            'User Login Control Options',
+            __( 'User Login Control Options', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
+            __( 'User Login Control Options', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
             'edit_users',
             'ulf-options',
             array( $this, 'display'));
@@ -79,14 +79,14 @@ class WP_User_Login_Control_Options {
 
     public function ulf_options_section_callback() {
         ?>
-            <p>User Login Control Options and settings</p>
+            <p><?php _e( 'User Login Control Options and settings', USER_LOGIN_CONTROL_TEXT_DOMAIN ); ?></p>
         <?php
     }
 
     public function ulf_options_fields_offline() {
         ?>
             <input type="number" name="make_offline" default="1" placeholder="1" value="<?php echo esc_attr( get_option('ulf_make_offline', 1) ); ?>">
-            <p>Make user offline in how much time of inactivity? ( In Minute )</p>
+            <p><?php _e( 'Make user offline in how much time of inactivity? ( In Minute )', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 
@@ -99,7 +99,7 @@ class WP_User_Login_Control_Options {
         ?>
             
             <input type="checkbox" name="destroy_others" default="no" <?php echo $checked; ?>>
-            <p>If user logged in with new device or browser remove other sessions and keep only active session.</p>
+            <p><?php _e( 'If user logged in with new device or browser remove other sessions and keep only active session.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 
@@ -112,7 +112,7 @@ class WP_User_Login_Control_Options {
         ?>
             
             <input type="checkbox" name="ulf_lock_login" default="no" <?php echo $checked; ?>>
-            <p>Lock login temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users logged out after this you can use Logout All Users button.</p>
+            <p><?php _e('Lock login temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users logged out after this you can use Logout All Users button.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 
@@ -125,7 +125,7 @@ class WP_User_Login_Control_Options {
             <select name="login_whitelist">
                 <?php wp_dropdown_roles($selected); ?>
             </select>
-            <p>Users with this role can login even if Lockdown is enabled.</p>
+            <p><?php _e( 'Users with this role can login even if Lockdown is enabled.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 

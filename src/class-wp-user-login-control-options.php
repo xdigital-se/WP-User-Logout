@@ -62,7 +62,7 @@ class WP_User_Login_Control_Options {
 
     add_settings_field(
         'ulf_options_fields_lock_login',
-        __( 'Lock login', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
+        __( 'Lockdown', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
         array( $this, 'ulf_options_fields_lock_login' ),
         'ulf',
         'ulf_options_section',
@@ -70,7 +70,7 @@ class WP_User_Login_Control_Options {
 
     add_settings_field(
         'ulf_options_fields_login_whitelist',
-        __( 'Login white list', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
+        __( 'Login Whitelist', USER_LOGIN_CONTROL_TEXT_DOMAIN ),
         array( $this, 'ulf_options_fields_login_whitelist_cb' ),
         'ulf',
         'ulf_options_section',
@@ -86,7 +86,7 @@ class WP_User_Login_Control_Options {
     public function ulf_options_fields_offline() {
         ?>
             <input type="number" name="make_offline" default="1" placeholder="1" value="<?php echo esc_attr( get_option('ulf_make_offline', 1) ); ?>">
-            <p><?php _e( 'Make user offline in how much time of inactivity? ( In Minute )', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
+            <p><?php _e( 'How many minutes of inactivity before user should be logged out?', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 
@@ -99,7 +99,7 @@ class WP_User_Login_Control_Options {
         ?>
             
             <input type="checkbox" name="destroy_others" default="no" <?php echo $checked; ?>>
-            <p><?php _e( 'If user logged in with new device or browser remove other sessions and keep only active session.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
+            <p><?php _e( 'If the user logged in with a new device or browser log out from other sessions and only keep the active session.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 
@@ -112,7 +112,7 @@ class WP_User_Login_Control_Options {
         ?>
             
             <input type="checkbox" name="ulf_lock_login" default="no" <?php echo $checked; ?>>
-            <p><?php _e('Lock login temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users logged out after this you can use Logout All Users button.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
+            <p><?php _e('Lock login availability temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users to log out you can use the Logout All Users button.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
 
@@ -164,7 +164,7 @@ class WP_User_Login_Control_Options {
             if ( 'Logout All Users' === $_POST['submit'] ) {
 
                 WP_User_Login_Control::destroy_all_sessions();
-                $_GET['updated-message'] = __( 'All users logged out successfully', USER_LOGIN_CONTROL_TEXT_DOMAIN );
+                $_GET['updated-message'] = __( 'All users logged out successfully.', USER_LOGIN_CONTROL_TEXT_DOMAIN );
 
             }else {
                 if ( isset( $_POST['make_offline'] ) ) {

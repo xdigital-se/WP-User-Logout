@@ -5,7 +5,7 @@ User Login Control is a WordPress plugin allows you to logout user(s) from their
 You can customize offline time as well for those users that were not active for the marked duration. If they are not active during the marked duration they will be logged out automatically. One additional feature is that you can manage user sessions and destroy other sessions when the user logs in with a new browser or device.
 
 # Hooks
-User Login Control provided actions and filters to help you improve your site by customizing it.
+User Login Control provides actions and filters to help you improve your site by customizing it.
 
 ## Filters
 Filters helps you to customize behavior of User Login Control in some situations.

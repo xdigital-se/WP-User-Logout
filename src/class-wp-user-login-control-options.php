@@ -85,7 +85,7 @@ class WP_User_Login_Control_Options {
 
     public function ulf_options_fields_offline() {
         ?>
-            <input type="number" name="make_offline" default="1" placeholder="1" value="<?php echo esc_attr( get_option('ulf_make_offline', 1) ); ?>">
+            <input type="number" name="make_offline" default="1" placeholder="1" value="<?php esc_attr_e( get_option('ulf_make_offline', 1) ); ?>">
             <p><?php _e( 'How many minutes of inactivity before user should be logged out?', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
@@ -98,7 +98,7 @@ class WP_User_Login_Control_Options {
             $checked = 'checked';
         ?>
             
-            <input type="checkbox" name="destroy_others" default="no" <?php echo $checked; ?>>
+            <input type="checkbox" name="destroy_others" default="no" <?php esc_attr_e( $checked ); ?>>
             <p><?php _e( 'If the user logged in with a new device or browser log out from other sessions and only keep the active session.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
@@ -111,7 +111,7 @@ class WP_User_Login_Control_Options {
             $checked = 'checked';
         ?>
             
-            <input type="checkbox" name="ulf_lock_login" default="no" <?php echo $checked; ?>>
+            <input type="checkbox" name="ulf_lock_login" default="no" <?php esc_attr_e($checked) ?>>
             <p><?php _e('Lock login availability temporary so no one can login except your own defined users.</br><b>**</b> Note that by enabling this users will not be logged out, If you want all users to log out you can use the Logout All Users button.', USER_LOGIN_CONTROL_TEXT_DOMAIN); ?></p>
         <?php
     }
@@ -144,7 +144,13 @@ class WP_User_Login_Control_Options {
             $new_input['make_offline'] = absint( $input['make_offline'] );
 
         if( isset( $input['destroy_others'] ) )
-            $new_input['destroy_others'] = absint( $input['destroy_others'] );
+            $new_input['destroy_others'] = sanitize_text_field( $input['destroy_others'] );
+
+        if( isset( $input['ulf_lock_login'] ) )
+            $new_input['ulf_lock_login'] = sanitize_text_field( $input['ulf_lock_login'] );
+
+        if( isset( $input['login_whitelist'] ) )
+            $new_input['login_whitelist'] = sanitize_text_field( $input['login_whitelist'] );
 
         return $new_input;
 
@@ -169,9 +175,9 @@ class WP_User_Login_Control_Options {
             }else {
                 if ( isset( $_POST['make_offline'] ) ) {
                     if ( false === get_option( 'ulf_make_offline', false) ) {
-                        add_option( 'ulf_make_offline', $_POST['make_offline'] );
+                        add_option( 'ulf_make_offline', $this->sanitize( $_POST )['make_offline'] );
                     }else {
-                        update_option( 'ulf_make_offline', $_POST['make_offline'] );
+                        update_option( 'ulf_make_offline', $this->sanitize( $_POST )['make_offline'] );
                     }
                 }
     
@@ -179,9 +185,9 @@ class WP_User_Login_Control_Options {
                     add_ulf_destroy:
                         $option = get_option( 'ulf_destroy_others', false);
                         if ( false === $option ) {
-                            add_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                            add_option( 'ulf_destroy_others', $this->sanitize( $_POST )['destroy_others'] );
                         }else {
-                            update_option( 'ulf_destroy_others', $_POST['destroy_others'] );
+                            update_option( 'ulf_destroy_others', $this->sanitize( $_POST )['destroy_others'] );
                         }
                 }else {
                     $_POST['destroy_others'] = 'no';
@@ -192,9 +198,9 @@ class WP_User_Login_Control_Options {
                     add_ulf_lock_login:
                         $option = get_option( 'ulf_lock_login', false);
                         if ( false === $option ) {
-                            add_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                            add_option( 'ulf_lock_login', $this->sanitize( $_POST )['ulf_lock_login'] );
                         }else {
-                            update_option( 'ulf_lock_login', $_POST['ulf_lock_login'] );
+                            update_option( 'ulf_lock_login', $this->sanitize( $_POST )['ulf_lock_login'] );
                         }
                 }else {
                     $_POST['ulf_lock_login'] = 'no';
@@ -203,9 +209,9 @@ class WP_User_Login_Control_Options {
     
                 if ( isset( $_POST['login_whitelist'] ) ) {
                     if ( false === get_option( 'ulf_login_while_list', false) ) {
-                        add_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
+                        add_option( 'ulf_login_while_list', $this->sanitize( $_POST )['login_whitelist'] );
                     }else {
-                        update_option( 'ulf_login_while_list', $_POST['login_whitelist'] );
+                        update_option( 'ulf_login_while_list', $this->sanitize( $_POST )['login_whitelist'] );
                     }
                 }
                 $_GET['updated-message'] = __( 'Settings Saved', USER_LOGIN_CONTROL_TEXT_DOMAIN );

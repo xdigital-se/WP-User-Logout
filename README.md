@@ -91,6 +91,9 @@ Before or after lockdown executed.
 Before and after logout all sessions for all users (Executed in settings page).
 
 # Changelog
+## 1.1
+Added sanitizing and escaping data
+
 ## 1.0
 Initial release
 

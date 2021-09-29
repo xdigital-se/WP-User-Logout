@@ -48,6 +48,9 @@ Yes you can, just visit [Github Repository](https://github.com/xdigital-se/UserL
 
 == Changelog ==
 
+= 1.1=
+* Added sanitizing and escaping data
+
 = 1.0 =
 * Initial release
 

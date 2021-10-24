@@ -91,6 +91,9 @@ Before or after lockdown executed.
 Before and after logout all sessions for all users (Executed in settings page).
 
 # Changelog
+## 1.2
+Fixed some minor sanitizing issue
+
 ## 1.1
 Added sanitizing and escaping data
 

@@ -288,7 +288,7 @@ class WP_User_Login_Control_Handler
         }
 
         $action = isset($_REQUEST['action']) ? sanitize_key($_REQUEST['action']) : false;
-        $mode = isset($_POST['mode']) ? $_POST['mode'] : false;
+        $mode = isset($_POST['mode']) ? sanitize_key($_POST['mode']) : false;
 
         if ('list' === $mode) return; // Bulk requests not allowed in multisite
         if (!empty($action) && 'logout' === $action)

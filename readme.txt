@@ -4,7 +4,7 @@ Donate link: https://xdigital.se/ulf
 Tags: logout users, force logout users, users, lock login, last login
 Requires at least: 4.5
 Tested up to: 5.8
-Stable tag: 1.1
+Stable tag: 1.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,11 @@ Yes you can, just visit [Github Repository](https://github.com/xdigital-se/UserL
 3. Lockdown message
 
 == Changelog ==
+== 1.3 ==
+* Fixed a sanitizing problem
+
+== 1.2 ==
+* Some minor changes
 
 = 1.1=
 * Added sanitizing and escaping data

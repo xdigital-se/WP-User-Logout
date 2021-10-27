@@ -224,7 +224,7 @@ class WP_User_Login_Control_Options {
 
         if ( isset( $_GET['settings-updated'] ) ) {
             // add settings saved message with the class of "updated"
-            add_settings_error( 'ulf_messages', 'ulf_message', $_GET['updated-message'], 'updated' );
+            add_settings_error( 'ulf_messages', 'ulf_message', sanitize_text_field($_GET['updated-message']), 'updated' );
         }
      
         // show error/update messages

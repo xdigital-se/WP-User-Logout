@@ -2,7 +2,7 @@
 /**
  * Plugin Name: User login control
  * Description: See online users and logout all users.
- * Version: 1.3
+ * Version: 1.4
  * Author: xdigital
  * Author URI: https://www.xdigital.se
  * Text Domain: user-login-control

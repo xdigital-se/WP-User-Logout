@@ -13,9 +13,9 @@ User Logout Force allows you to logout users or user and see the last activity o
 
 == Description ==
 
-User Logout Force allows you to logout users or user from their account or see offline users last activity in your site. Also you can lock login so no one can login other thatn your chosen role with a custom message.
+User Login Control is a WordPress plugin allows you to logout user(s) from their account or to see the last activity of your offline users. You can also lock login availability so that no one can login other than your chosen role (administrator i.e) and to have a custom message for those unable to login.
 
-You can customize offline time for users so users that weren't active in that time marked as offline.
+You can customize offline time as well for those users that were not active for the marked duration. If they are not active during the marked duration they will be logged out automatically. One additional feature is that you can manage user sessions and destroy other sessions when the user logs in with a new browser or device.
 
 == Frequently Asked Questions ==
 

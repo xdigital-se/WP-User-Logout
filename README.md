@@ -1,14 +1,14 @@
 # User Login Control
 
-User Login Control is a WordPress plugin allows you to logout user(s) from their account or to see the last activity of your offline users. You can also lock login availability so that no one can login other than your chosen role (administrator i.e) and to have a custom message for those unable to login.
+WP User Logout is a WordPress plugin allows you to logout user(s) from their account or to see the last activity of your offline users. You can also lock login availability so that no one can login other than your chosen role (administrator i.e) and to have a custom message for those unable to login.
 
 You can customize offline time as well for those users that were not active for the marked duration. If they are not active during the marked duration they will be logged out automatically. One additional feature is that you can manage user sessions and destroy other sessions when the user logs in with a new browser or device.
 
 # Hooks
-User Login Control provides actions and filters to help you improve your site by customizing it.
+WP User Logout provides actions and filters to help you improve your site by customizing it.
 
 ## Filters
-Filters helps you to customize behavior of User Login Control in some situations.
+Filters helps you to customize behavior of WP User Logout in some situations.
 ### ulf_row_status
 This filter used to customize each status for users row.
 #### Paramteres
@@ -27,7 +27,7 @@ add_filter( 'ulf_row_status', function($row_status, $is_user_online, $last_login
 }, 10, 3);
 ```
 ### ulf_redirect_after_request
-Set your custom url that redirect after handling requests (Logout user, Logout all users).
+Set your custom url that redirects after handling requests (Logout user, Logout all users).
 #### Paramteres
 ```
 $redirect_url
@@ -78,17 +78,17 @@ Before or after row is going to output.
 ### before_ulf_handle_request
 Before handling users table requests.
 ### before_ulf_logout_user, after_ulf_logout_user
-Before or after logout single user.
+Before or after logging out a single user.
 ### before_ulf_logout_all_users, after_ulf_logout_all_users
-Before or after logout all users.
+Before or after logging out all users.
 ### before_ulf_update_last_login, after_ulf_update_last_login
-Before after update last login for user.
+Before or after updating last login for user.
 ### before_ulf_destroy_others, after_ulf_destroy_others
-Before or after destroy other users session.
+Before or after destroying other users session.
 ### before_ulf_lockdown, after_ulf_lockdown
-Before or after lockdown executed.
+Before or after lockdown is executed.
 ### before_ulf_destroy_all_sessions_for_all_users, after_ulf_destroy_all_sessions_for_all_users
-Before and after logout all sessions for all users (Executed in settings page).
+Before and after logging out all sessions for all users (Executed in settings page).
 
 # Changelog
 ## 1.4

@@ -19,26 +19,25 @@ You can customize offline time as well for those users that were not active for 
 
 == Frequently Asked Questions ==
 
-= Do users can login after I logout them? =
+= Can users login after I logout them? =
 
-Yes, if Lockdown was not enable users can login just like before.
+Yes, if Lockdown is not active users can login normally.
 
 = Can I (administator) login durning lockdown? =
 
 Yes, we provide an option in ULF Settings so you can select your role or create a custom role for admins can login durning lockdown and you will be free to login as before.
 
-= Can I logout all of users with just one clock? =
+= Can I logout all of users with just one click? =
 
-Yes, it's piece of cake to do that.
+Yes, of course.
 
 = Do User Logout Force has custom actions and filters? =
 
 Yes, You can customize plugin however you want to with actions and filters that we provided. [Documentation](https://github.com/xdigital-se/UserLogoutForce)
 
-= Can I Contribute? =
+= Can I contribute? =
 
-We are so happy that you want to contribute :)
-Yes you can, just visit [Github Repository](https://github.com/xdigital-se/UserLogoutForce)
+Absolutely. We'd be very happy to have you contribute. Visit [Github Repository](https://github.com/xdigital-se/UserLogoutForce)
 
 == Screenshots ==
 
